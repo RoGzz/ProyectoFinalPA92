@@ -16,5 +16,10 @@ namespace BrainW
         {
             InitializeComponent();
         }
+
+        private void FRM_InicioSesion_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
