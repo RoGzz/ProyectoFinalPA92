@@ -12,14 +12,14 @@ using MySql.Data.MySqlClient;
 
 namespace BrainW
 {
-    public partial class FRM_InicioSesion : Form
+    public partial class frmInicioSesion : Form
     {
         public string stringconnection = "Database=pfpa92; DataSource=localhost; Uid=root; pwd=1234";
         public MySqlCommand cmd = new MySqlCommand();
         public MySqlDataAdapter adapter = new MySqlDataAdapter();
         public DataSet dataset = new DataSet();
 
-        public FRM_InicioSesion()
+        public frmInicioSesion()
         {
             InitializeComponent();
         }
