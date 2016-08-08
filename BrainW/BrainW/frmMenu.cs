@@ -16,5 +16,18 @@ namespace BrainW
         {
             InitializeComponent();
         }
+
+        private void cerrarSesiónToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+            frmInicioSesion login = new frmInicioSesion();
+            login.Show();
+        }
+
+        private void usuariosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmUsuarios users = new frmUsuarios;
+            users.Show();
+        }
     }
 }
