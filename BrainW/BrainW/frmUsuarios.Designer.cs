@@ -127,6 +127,7 @@
             this.bttnAceptar.TabIndex = 8;
             this.bttnAceptar.Text = "Aceptar";
             this.bttnAceptar.UseVisualStyleBackColor = true;
+            this.bttnAceptar.Click += new System.EventHandler(this.bttnAceptar_Click);
             // 
             // groupBox1
             // 
