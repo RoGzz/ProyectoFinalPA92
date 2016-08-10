@@ -53,7 +53,16 @@ namespace BrainW
             MessageBox.Show("Usuario actualizado con exito");
         }
 
-      
+        private void Eliminar()
+        {
+            db.cmd.CommandText = ("DELETE FROM tblusuario WHERE id_u ='" + dataGridView1.SelectedCells + "' ");
+            db.cmd.Connection = db.conn;
+            if (db.conn.State == 0)
+                db.conn.Open();
+            db.cmd.ExecuteNonQuery();
+            db.conn.Close();
+            MessageBox.Show("Usuario actualizado con exito");
+        }
 
         
 
