@@ -16,8 +16,6 @@ namespace BrainW
     {
         public string stringconnection = "Database=pfpa92; DataSource=localhost; Uid=root; pwd=1234";
         public MySqlCommand cmd = new MySqlCommand();
-        public MySqlDataAdapter adapter = new MySqlDataAdapter();
-        public DataSet dataset = new DataSet();
 
         public frmInicioSesion()
         {
@@ -28,45 +26,32 @@ namespace BrainW
         {
             try
             {
+
                 MySqlConnection conn = new MySqlConnection(stringconnection);
-                cmd.CommandText = "SELECT id_u, user, password, type FROM tblusuarios";
                 cmd.Connection = conn;
                 if (conn.State == 0)
-                    conn.Open();
-                cmd.ExecuteNonQuery();
-                conn.Close();
-                adapter.SelectCommand = cmd;
-                adapter.Fill(dataset, "tblusuarios");
-                if (dataset.Tables[0].Rows.Count > 0)
+                    conn.Open(); 
+                cmd.CommandText = "SELECT user, password, type FROM tblusuarios WHERE user = '" + txtB_Usuario.Text + "' && password = '" + txtB_Contraseña.Text + "'";
+                MySqlDataReader leer = cmd.ExecuteReader();
+                if (leer.Read())
                 {
-                    for (int rowC = 0; rowC < dataset.Tables[0].Rows.Count; rowC++)
-                    {
-                        if (txtB_Usuario.Text == dataset.Tables[0].Rows[rowC].ItemArray[1].ToString() && txtB_Contraseña.Text == dataset.Tables[0].Rows[rowC].ItemArray[2].ToString())
-                        {
-                            this.Visible = false;
-                            frmMenu menu = new frmMenu();
-                            menu.Show();
-                            break;
-                        }
-                        else
-                        {
-                            if (rowC == dataset.Tables[0].Rows.Count - 1)
-                            {
-                                MessageBox.Show("Usuario/Contraseña incorrectos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                txtB_Usuario.Clear();
-                                txtB_Contraseña.Clear();
-                                txtB_Usuario.Focus();
-                            }
-                        }
-                    }
+                    this.Visible = false;
+                    frmMenu menu = new frmMenu();
+                    menu.Show();
+                }
+                else
+                {
+                    MessageBox.Show("Usuario/Contraseña incorrectos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    txtB_Usuario.Clear();
+                    txtB_Contraseña.Clear();
+                    txtB_Usuario.Focus();
                 }
             }
-            catch (Exception excp)
+            catch (Exception exp)
             {
-                MessageBox.Show(excp.Message);
+                MessageBox.Show(exp.Message);
             }
         }
-
 
         private void FRM_InicioSesion_Load(object sender, EventArgs e)
         {
