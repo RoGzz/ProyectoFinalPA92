@@ -14,9 +14,7 @@ namespace BrainW
 {
     public partial class frmInicioSesion : Form
     {
-        public string stringconnection = "Database=pfpa92; DataSource=localhost; Uid=root; pwd=1234";
-        public MySqlCommand cmd = new MySqlCommand();
-
+        dbConn dbConn = new dbConn();
         public frmInicioSesion()
         {
             InitializeComponent();
@@ -26,13 +24,12 @@ namespace BrainW
         {
             try
             {
-
-                MySqlConnection conn = new MySqlConnection(stringconnection);
-                cmd.Connection = conn;
-                if (conn.State == 0)
-                    conn.Open(); 
-                cmd.CommandText = "SELECT user, password, type FROM tblusuarios WHERE user = '" + txtB_Usuario.Text + "' && password = '" + txtB_Contraseña.Text + "'";
-                MySqlDataReader leer = cmd.ExecuteReader();
+                dbConn.cmd.Connection =dbConn.conn;
+                if (dbConn.conn.State == 0)
+                    dbConn.conn.Open();
+                dbConn.cmd.CommandText = "SELECT user, password, type FROM tblusuarios WHERE user = '" + txtB_Usuario.Text + "' && password = '" + txtB_Contraseña.Text + "'";
+                MySqlDataReader leer = dbConn.cmd.ExecuteReader();
+                
                 if (leer.Read())
                 {
                     this.Visible = false;
@@ -46,6 +43,7 @@ namespace BrainW
                     txtB_Contraseña.Clear();
                     txtB_Usuario.Focus();
                 }
+                dbConn.conn.Close();
             }
             catch (Exception exp)
             {
