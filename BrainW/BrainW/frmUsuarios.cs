@@ -29,11 +29,11 @@ namespace BrainW
             return tipo;
         }
 
-         
+
 
         private void AgregarUsuario()
         {
-            db.cmd.CommandText = ("INSERT INTO tblusuarios VALUES (user, password, nivel) VALUES ('" + txtUsuario.Text + "','" + txtContrasena.Text + "','" + getTipo(comboBoxTipoCuenta.SelectedItem.ToString()) + "')");
+            db.cmd.CommandText = ("INSERT INTO tblusuarios (user, password, type) VALUES ('" + txtUsuario.Text + "','" + txtContrasena.Text + "','" + getTipo(comboBoxTipoCuenta.SelectedItem.ToString()) + "')");
             db.cmd.Connection = db.conn;
             if (db.conn.State == 0)
                 db.conn.Open();
@@ -44,14 +44,32 @@ namespace BrainW
 
         private void EditarUsurio()
         {
-            //db.cmd.CommandText = ("UPDATE tblusuario SET user = '" + txtUsuario.Text + "', password = '" + txtContrasena.Text + "', nivel = '" + getTipo(comboBoxTipoCuenta.SelectedItem.ToString() + "')");
+            db.cmd.CommandText = ("UPDATE tblusuario SET user = '" + txtUsuario.Text + "', password = '" + txtContrasena.Text + "', nivel = '" + getTipo(comboBoxTipoCuenta.SelectedItem.ToString()) + "' WHERE id_u = '" + dataGridView1.SelectedCells + "')");
+            db.cmd.Connection = db.conn;
+            if (db.conn.State == 0)
+                db.conn.Open();
+            db.cmd.ExecuteNonQuery();
+            db.conn.Close();
+            MessageBox.Show("Usuario actualizado con exito");
+        }
+
+      
+
+        
+
+        private void LimpiarCampos()
+        {
+            txtUsuario.Clear();
+            txtContrasena.Clear();
+            txtVerifContra.Clear();
+            comboBoxTipoCuenta.Text = "";
+            txtUsuario.Focus();
         }
 
         private void cargarDatos()
         {
             db.conn.Open();
-            //OdbcDataAdapter da = new OdbcDataAdapter();
-            MySqlDataAdapter da = new MySqlDataAdapter("SELECT * FROM tblusuarios order by id_u", db.conn);
+            MySqlDataAdapter da = new MySqlDataAdapter("SELECT id_u, user FROM tblusuarios order by id_u", db.conn);
             DataTable dt = new DataTable();
             da.Fill(dt);
             dataGridView1.DataSource = dt;
@@ -62,6 +80,19 @@ namespace BrainW
         private void frmUsuarios_Load(object sender, EventArgs e)
         {
             cargarDatos();
+        }
+
+        private void bttnAceptar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                AgregarUsuario();
+                cargarDatos();
+            }
+            catch (Exception exp)
+            {
+                MessageBox.Show(exp.Message);
+            }
         }
     }
 }
