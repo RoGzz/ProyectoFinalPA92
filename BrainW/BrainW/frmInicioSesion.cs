@@ -34,6 +34,7 @@ namespace BrainW
                 {
                     this.Visible = false;
                     frmMenu menu = new frmMenu();
+                    menu.userToolStripMenuItem.Text = txtB_Usuario.Text;
                     menu.Show();
                 }
                 else

@@ -33,13 +33,18 @@ namespace BrainW
 
         private void AgregarUsuario()
         {
-            db.cmd.CommandText = ("INSERT INTO tblusuarios (user, password, type) VALUES ('" + txtUsuario.Text + "','" + txtContrasena.Text + "','" + getTipo(comboBoxTipoCuenta.SelectedItem.ToString()) + "')");
-            db.cmd.Connection = db.conn;
-            if (db.conn.State == 0)
-                db.conn.Open();
-            db.cmd.ExecuteNonQuery();
-            db.conn.Close();
-            MessageBox.Show("Usuario registrado con exito");
+            if (txtContrasena.Text == txtVerifContra.Text)
+            {
+                db.cmd.CommandText = ("INSERT INTO tblusuarios (user, password, type) VALUES ('" + txtUsuario.Text + "','" + txtContrasena.Text + "','" + getTipo(comboBoxTipoCuenta.SelectedItem.ToString()) + "')");
+                db.cmd.Connection = db.conn;
+                if (db.conn.State == 0)
+                    db.conn.Open();
+                db.cmd.ExecuteNonQuery();
+                db.conn.Close();
+                MessageBox.Show("Usuario registrado con exito");
+            }
+            else
+                MessageBox.Show("Las contraseñas no coinciden");
         }
 
         private void EditarUsurio()
@@ -64,7 +69,16 @@ namespace BrainW
             MessageBox.Show("Usuario actualizado con exito");
         }
 
-        
+        private void verifContra()
+        {
+            
+            pictureBox1.Visible = true;
+            if (txtVerifContra.Text == txtContrasena.Text)
+
+                pictureBox1.Image = Properties.Resources.Ok;
+            else
+                pictureBox1.Image = Properties.Resources.Error;
+        }
 
         private void LimpiarCampos()
         {
@@ -86,9 +100,32 @@ namespace BrainW
             dt.Dispose();
         }
 
+        private void cargarUser()
+        {
+            db.cmd.CommandText = "SELECT * from tblusuarios WHERE id_u = '" + dataGridView1.SelectedCells.ToString() + "'";
+            MySqlDataAdapter da = new MySqlDataAdapter();
+            DataSet ds = new DataSet();
+            db.cmd.Connection = db.conn;
+            if (db.conn.State == 0)
+                db.conn.Open();
+            db.cmd.ExecuteNonQuery();
+            da.SelectCommand = db.cmd;
+            da.Fill(ds,"tblusuarios");
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                txtID.Text = ds.Tables[0].Rows[0].ItemArray[0].ToString();
+                txtUsuario.Text = ds.Tables[0].Rows[0].ItemArray[1].ToString();
+                txtContrasena.Text = ds.Tables[0].Rows[0].ItemArray[2].ToString();
+                comboBoxTipoCuenta.Text = ds.Tables[0].Rows[0].ItemArray[3].ToString();
+            }
+            db.conn.Close();
+
+        }
+
         private void frmUsuarios_Load(object sender, EventArgs e)
         {
             cargarDatos();
+
         }
 
         private void bttnAceptar_Click(object sender, EventArgs e)
@@ -102,6 +139,31 @@ namespace BrainW
             {
                 MessageBox.Show(exp.Message);
             }
+        }
+
+        private void toolStripButtonAgregar_CheckStateChanged(object sender, EventArgs e)
+        {
+            if (toolStripButtonAgregar.Checked == false)
+            {
+                toolStripButtonEditar.Checked = false;
+                toolStripButtonEliminar.Checked = false;
+                toolStripButtonAgregar.Checked = true;
+            }
+        }
+
+        private void txtVerifContra_TextChanged(object sender, EventArgs e)
+        {
+            verifContra();
+        }
+
+        private void txtContrasena_TextChanged(object sender, EventArgs e)
+        {
+            verifContra();
+        }
+
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            cargarUser();
         }
     }
 }
