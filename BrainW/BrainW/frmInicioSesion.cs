@@ -28,9 +28,9 @@ namespace BrainW
                 if (dbConn.conn.State == 0)
                     dbConn.conn.Open();
                 dbConn.cmd.CommandText = "SELECT user, password, type FROM tblusuarios WHERE user = '" + txtB_Usuario.Text + "' && password = '" + txtB_Contraseña.Text + "'";
-                MySqlDataReader leer = dbConn.cmd.ExecuteReader();
+                MySqlDataReader dato = dbConn.cmd.ExecuteReader();
                 
-                if (leer.Read())
+                if (dato.Read())
                 {
                     this.Visible = false;
                     frmMenu menu = new frmMenu();

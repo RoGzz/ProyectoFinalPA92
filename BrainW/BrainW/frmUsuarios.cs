@@ -15,6 +15,7 @@ namespace BrainW
     public partial class frmUsuarios : Form
     {
         dbConn db = new dbConn();
+        bool validar;
 
         public frmUsuarios()
         {
@@ -29,6 +30,7 @@ namespace BrainW
             return tipo;
         }
 
+       
 
 
         private void AgregarUsuario()
@@ -47,9 +49,9 @@ namespace BrainW
                 MessageBox.Show("Las contraseñas no coinciden");
         }
 
-        private void EditarUsurio()
+        private void EditarUsuario()
         {
-            db.cmd.CommandText = ("UPDATE tblusuario SET user = '" + txtUsuario.Text + "', password = '" + txtContrasena.Text + "', nivel = '" + getTipo(comboBoxTipoCuenta.SelectedItem.ToString()) + "' WHERE id_u = '" + dataGridView1.SelectedCells + "')");
+            db.cmd.CommandText = ("UPDATE tblusuarios SET user = '" + txtUsuario.Text + "', password = '" + txtContrasena.Text + "', type = '" + getTipo(comboBoxTipoCuenta.SelectedItem.ToString()) + "' WHERE id_u = '" + txtID.Text + "'");
             db.cmd.Connection = db.conn;
             if (db.conn.State == 0)
                 db.conn.Open();
@@ -58,20 +60,20 @@ namespace BrainW
             MessageBox.Show("Usuario actualizado con exito");
         }
 
-        private void Eliminar()
+        private void EliminarUsuario()
         {
-            db.cmd.CommandText = ("DELETE FROM tblusuario WHERE id_u ='" + dataGridView1.SelectedCells + "' ");
+            db.cmd.CommandText = ("DELETE FROM tblusuarios WHERE id_u ='" + txtID.Text + "' ");
             db.cmd.Connection = db.conn;
             if (db.conn.State == 0)
                 db.conn.Open();
             db.cmd.ExecuteNonQuery();
             db.conn.Close();
-            MessageBox.Show("Usuario actualizado con exito");
+            MessageBox.Show("Usuario eliminado con exito");
         }
 
         private void verifContra()
         {
-            
+
             pictureBox1.Visible = true;
             if (txtVerifContra.Text == txtContrasena.Text)
 
@@ -82,6 +84,7 @@ namespace BrainW
 
         private void LimpiarCampos()
         {
+            txtID.Clear();
             txtUsuario.Clear();
             txtContrasena.Clear();
             txtVerifContra.Clear();
@@ -92,7 +95,7 @@ namespace BrainW
         private void cargarDatos()
         {
             db.conn.Open();
-            MySqlDataAdapter da = new MySqlDataAdapter("SELECT id_u, user FROM tblusuarios order by id_u", db.conn);
+            MySqlDataAdapter da = new MySqlDataAdapter("SELECT id_u, user, password, type  FROM tblusuarios order by id_u", db.conn);
             DataTable dt = new DataTable();
             da.Fill(dt);
             dataGridView1.DataSource = dt;
@@ -102,29 +105,36 @@ namespace BrainW
 
         private void cargarUser()
         {
-            db.cmd.CommandText = "SELECT * from tblusuarios WHERE id_u = '" + dataGridView1.SelectedCells.ToString() + "'";
-            MySqlDataAdapter da = new MySqlDataAdapter();
-            DataSet ds = new DataSet();
-            db.cmd.Connection = db.conn;
-            if (db.conn.State == 0)
-                db.conn.Open();
-            db.cmd.ExecuteNonQuery();
-            da.SelectCommand = db.cmd;
-            da.Fill(ds,"tblusuarios");
-            if (ds.Tables[0].Rows.Count > 0)
+            if (dataGridView1.SelectedCells.Count > 0)
             {
-                txtID.Text = ds.Tables[0].Rows[0].ItemArray[0].ToString();
-                txtUsuario.Text = ds.Tables[0].Rows[0].ItemArray[1].ToString();
-                txtContrasena.Text = ds.Tables[0].Rows[0].ItemArray[2].ToString();
-                comboBoxTipoCuenta.Text = ds.Tables[0].Rows[0].ItemArray[3].ToString();
-            }
-            db.conn.Close();
+                int selectedrowindex = dataGridView1.SelectedCells[0].RowIndex;
+                DataGridViewRow selectedRow = dataGridView1.Rows[selectedrowindex];
+                string a = Convert.ToString(selectedRow.Cells[0].Value);
+                db.cmd.CommandText = "SELECT * from tblusuarios WHERE id_u = '" + a + "'";
+                MySqlDataAdapter da = new MySqlDataAdapter();
+                DataSet ds = new DataSet();
+                db.cmd.Connection = db.conn;
+                if (db.conn.State == 0)
+                    db.conn.Open();
+                db.cmd.ExecuteNonQuery();
+                da.SelectCommand = db.cmd;
+                da.Fill(ds, "tblusuarios");
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    txtID.Text = ds.Tables[0].Rows[0].ItemArray[0].ToString();
+                    txtUsuario.Text = ds.Tables[0].Rows[0].ItemArray[1].ToString();
+                    txtContrasena.Text = ds.Tables[0].Rows[0].ItemArray[2].ToString();
+                    comboBoxTipoCuenta.Text = ds.Tables[0].Rows[0].ItemArray[3].ToString();
+                }
+                db.conn.Close();
 
+            }
         }
+
+        
 
         private void frmUsuarios_Load(object sender, EventArgs e)
         {
-            cargarDatos();
 
         }
 
@@ -132,15 +142,36 @@ namespace BrainW
         {
             try
             {
-                AgregarUsuario();
-                cargarDatos();
+
+                if (txtContrasena.Text != txtVerifContra.Text)
+                {
+                    MessageBox.Show("La contraseña no concuerda", "Error de verificación", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else {
+                    string ope = groupBox1.Text;
+                    switch (ope)
+                    {
+                        case "Agregar":
+                            AgregarUsuario();
+                            break;
+                        case "Editar":
+                            EditarUsuario();
+                            cargarDatos();
+                            break;
+                        case "Eliminar":
+                            EliminarUsuario();
+                            cargarDatos();
+                            break;
+                    }
+                    LimpiarCampos();
+                }
             }
             catch (Exception exp)
             {
                 MessageBox.Show(exp.Message);
             }
         }
-
+    
         private void toolStripButtonAgregar_CheckStateChanged(object sender, EventArgs e)
         {
             if (toolStripButtonAgregar.Checked == false)
@@ -161,9 +192,36 @@ namespace BrainW
             verifContra();
         }
 
-        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+       
+        private void toolStripButtonEliminar_Click(object sender, EventArgs e)
+        {
+            cargarDatos();
+            groupBox1.Text = "Eliminar";
+            dataGridView1.Enabled = true;
+        }
+
+        private void dataGridView1_CellStateChanged(object sender, DataGridViewCellStateChangedEventArgs e)
         {
             cargarUser();
+        }
+
+        
+
+        private void toolStripButtonAgregar_Click(object sender, EventArgs e)
+        {
+            LimpiarCampos();
+            groupBox1.Text = "Agregar";
+            dataGridView1.Enabled = false;
+            dataGridView1.SelectAll();
+            dataGridView1.ClearSelection();
+        }
+
+        private void toolStripButtonEditar_Click(object sender, EventArgs e)
+        {
+            cargarDatos();
+            groupBox1.Text = "Editar";
+            dataGridView1.Enabled = true;
+           
         }
     }
 }

@@ -27,6 +27,7 @@ namespace BrainW
         private void usuariosToolStripMenuItem_Click(object sender, EventArgs e)
         {
             frmUsuarios users = new frmUsuarios();
+           
             users.Show();
         }
 
