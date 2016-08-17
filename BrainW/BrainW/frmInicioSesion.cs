@@ -15,6 +15,9 @@ namespace BrainW
     public partial class frmInicioSesion : Form
     {
         dbConn dbConn = new dbConn();
+        public static int id;
+        
+
         public frmInicioSesion()
         {
             InitializeComponent();
@@ -27,11 +30,12 @@ namespace BrainW
                 dbConn.cmd.Connection =dbConn.conn;
                 if (dbConn.conn.State == 0)
                     dbConn.conn.Open();
-                dbConn.cmd.CommandText = "SELECT user, password, type FROM tblusuarios WHERE user = '" + txtB_Usuario.Text + "' && password = '" + txtB_Contraseña.Text + "'";
+                dbConn.cmd.CommandText = "SELECT id_u, user, password, type FROM tblusuarios WHERE user = '" + txtB_Usuario.Text + "' && password = '" + txtB_Contraseña.Text + "'";
                 MySqlDataReader dato = dbConn.cmd.ExecuteReader();
                 
                 if (dato.Read())
                 {
+                    
                     this.Visible = false;
                     frmMenu menu = new frmMenu();
                     menu.userToolStripMenuItem.Text = txtB_Usuario.Text;

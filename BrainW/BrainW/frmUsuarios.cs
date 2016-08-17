@@ -15,7 +15,6 @@ namespace BrainW
     public partial class frmUsuarios : Form
     {
         dbConn db = new dbConn();
-        bool validar;
 
         public frmUsuarios()
         {
@@ -212,8 +211,6 @@ namespace BrainW
             LimpiarCampos();
             groupBox1.Text = "Agregar";
             dataGridView1.Enabled = false;
-            dataGridView1.SelectAll();
-            dataGridView1.ClearSelection();
         }
 
         private void toolStripButtonEditar_Click(object sender, EventArgs e)
