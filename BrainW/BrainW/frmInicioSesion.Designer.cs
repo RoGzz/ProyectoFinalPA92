@@ -90,6 +90,7 @@
             this.Controls.Add(this.txtB_Usuario);
             this.Controls.Add(this.txtB_Contraseña);
             this.Name = "frmInicioSesion";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Inicio de sesión";
             this.Load += new System.EventHandler(this.FRM_InicioSesion_Load);
             this.ResumeLayout(false);

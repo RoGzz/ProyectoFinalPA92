@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Data;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 
@@ -14,6 +15,8 @@ namespace BrainW
         //public MySqlConnection conn = new MySqlConnection(stringconnection);
         public MySqlConnection conn = new MySqlConnection(stringconnection);
         public MySqlCommand cmd = new MySqlCommand();
+        public MySqlDataAdapter adapter = new MySqlDataAdapter();
+        public DataSet dataset = new DataSet();
         
     }
 }

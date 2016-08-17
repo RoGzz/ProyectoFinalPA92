@@ -55,6 +55,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="dbConn.cs" />
+    <Compile Include="frmacercaDe.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmacercaDe.Designer.cs">
+      <DependentUpon>frmacercaDe.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmInicioSesion.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -80,6 +86,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="frmacercaDe.resx">
+      <DependentUpon>frmacercaDe.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmInicioSesion.resx">
       <DependentUpon>frmInicioSesion.cs</DependentUpon>
     </EmbeddedResource>

@@ -19,20 +19,31 @@ namespace BrainW
 
         private void cerrarSesiónToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.Close();
-            frmInicioSesion login = new frmInicioSesion();
-            login.Show();
+            Application.Restart();
         }
 
         private void usuariosToolStripMenuItem_Click(object sender, EventArgs e)
         {
             frmUsuarios users = new frmUsuarios();
-           
+            users.MdiParent = this;
             users.Show();
+        
         }
 
         private void frmMenu_Load(object sender, EventArgs e)
         {
+
+        }
+
+        private void frmMenu_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void acercaDeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmacercaDe version = new frmacercaDe();
+            version.Show();
 
         }
     }
