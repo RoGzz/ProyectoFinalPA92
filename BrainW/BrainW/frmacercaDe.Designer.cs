@@ -51,7 +51,8 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmacercaDe";
-            this.Text = "frmacercaDe";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Acerca De";
             this.ResumeLayout(false);
             this.PerformLayout();
 

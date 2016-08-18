@@ -17,6 +17,14 @@ namespace BrainW
             InitializeComponent();
         }
 
+        public void ChildCleaner()
+        {
+            for (int cc = 0; cc < this.MdiChildren.Length; cc++)
+            {
+                this.MdiChildren[cc].Close();
+            }
+        }
+
         private void cerrarSesiónToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Application.Restart();
@@ -24,6 +32,7 @@ namespace BrainW
 
         private void usuariosToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            ChildCleaner();
             frmUsuarios users = new frmUsuarios();
             users.MdiParent = this;
             users.Show();
@@ -43,8 +52,17 @@ namespace BrainW
         private void acercaDeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             frmacercaDe version = new frmacercaDe();
+            version.MdiParent = this;
             version.Show();
 
+        }
+
+        private void reportesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ChildCleaner();
+            frmReportes report = new frmReportes();
+            report.MdiParent = this;
+            report.Show();
         }
     }
 }
