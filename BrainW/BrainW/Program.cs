@@ -16,7 +16,7 @@ namespace BrainW
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FRM_InicioSesion());
+            Application.Run(new frmMenu());
         }
     }
 }

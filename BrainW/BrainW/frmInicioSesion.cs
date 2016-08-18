@@ -12,61 +12,60 @@ using MySql.Data.MySqlClient;
 
 namespace BrainW
 {
-    public partial class FRM_InicioSesion : Form
+    public partial class frmInicioSesion : Form
     {
-        public string stringconnection = "Database=pfpa92; DataSource=localhost; Uid=root; pwd=1234";
-        public MySqlCommand cmd = new MySqlCommand();
-        public MySqlDataAdapter adapter = new MySqlDataAdapter();
-        public DataSet dataset = new DataSet();
+        dbConn dbConn = new dbConn();
+        public static int id_u;
+        
 
-        public FRM_InicioSesion()
+        public frmInicioSesion()
         {
             InitializeComponent();
         }
 
         private void login()
         {
+            
             try
             {
-                MySqlConnection conn = new MySqlConnection(stringconnection);
-                cmd.CommandText = "SELECT id_u, user, password, type FROM tblusuarios";
-                cmd.Connection = conn;
-                if (conn.State == 0)
-                    conn.Open();
-                cmd.ExecuteNonQuery();
-                conn.Close();
-                adapter.SelectCommand = cmd;
-                adapter.Fill(dataset, "tblusuarios");
-                if (dataset.Tables[0].Rows.Count > 0)
+                dbConn.cmd.Connection = dbConn.conn;
+                if (dbConn.conn.State == 0)
+                    dbConn.conn.Open();
+                dbConn.cmd.CommandText = "SELECT id_u, user, password, type FROM tblusuarios WHERE user = '" + txtB_Usuario.Text + "' && password = '" + txtB_Contraseña.Text + "'";
+                MySqlDataReader dato = dbConn.cmd.ExecuteReader();
+                
+                if (dato.Read())
                 {
-                    for (int rowC = 0; rowC < dataset.Tables[0].Rows.Count; rowC++)
-                    {
-                        if (txtB_Usuario.Text == dataset.Tables[0].Rows[rowC].ItemArray[1].ToString() && txtB_Contraseña.Text == dataset.Tables[0].Rows[rowC].ItemArray[2].ToString())
-                        {
-                            this.Visible = false;
-                            frmMenu menu = new frmMenu();
-                            menu.Show();
-                            break;
-                        }
-                        else
-                        {
-                            if (rowC == dataset.Tables[0].Rows.Count - 1)
-                            {
-                                MessageBox.Show("Usuario/Contraseña incorrectos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                txtB_Usuario.Clear();
-                                txtB_Contraseña.Clear();
-                                txtB_Usuario.Focus();
-                            }
-                        }
-                    }
+                    dbConn.conn.Close();
+                    dbConn.conn.Open();
+                    dbConn.cmd.ExecuteNonQuery();
+                    dbConn.adapter.SelectCommand = dbConn.cmd;
+                    dbConn.adapter.Fill(dbConn.dataset, "tblusuarios");
+                    id_u = int.Parse(dbConn.dataset.Tables[0].Rows[0].ItemArray[0].ToString());
+                    dbConn.conn.Close();
+                    dbConn.cmd.CommandText = "iNSERT INTO tblsesiones (id_u, date) VALUES('" + id_u + "','" + DateTime.Now.ToString() + "')";
+                    dbConn.conn.Open();
+                    dbConn.cmd.ExecuteNonQuery();
+                    //MessageBox.Show(id_u.ToString());
+                    this.Visible = false;
+                    frmMenu menu = new frmMenu();
+                    menu.userToolStripMenuItem.Text = txtB_Usuario.Text;
+                    menu.Show();
                 }
+                else
+                {
+                    MessageBox.Show("Usuario/Contraseña incorrectos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    txtB_Usuario.Clear();
+                    txtB_Contraseña.Clear();
+                    txtB_Usuario.Focus();
+                }
+                dbConn.conn.Close();
             }
-            catch (Exception excp)
+            catch (Exception exp)
             {
-                MessageBox.Show(excp.Message);
+                MessageBox.Show(exp.Message);
             }
         }
-
 
         private void FRM_InicioSesion_Load(object sender, EventArgs e)
         {
