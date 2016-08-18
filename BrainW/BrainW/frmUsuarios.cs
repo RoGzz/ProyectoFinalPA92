@@ -94,7 +94,7 @@ namespace BrainW
         private void cargarDatos()
         {
             db.conn.Open();
-            MySqlDataAdapter da = new MySqlDataAdapter("SELECT id_u, user, password, type  FROM tblusuarios order by id_u", db.conn);
+            MySqlDataAdapter da = new MySqlDataAdapter("SELECT id_u as ID, user as Usuario, type as Tipo_de_cuenta  FROM tblusuarios order by id_u", db.conn);
             DataTable dt = new DataTable();
             da.Fill(dt);
             dataGridView1.DataSource = dt;
