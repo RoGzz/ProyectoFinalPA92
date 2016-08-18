@@ -49,15 +49,14 @@
             this.toolStripButtonEliminar = new System.Windows.Forms.ToolStripButton();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.tblusuariosBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.pfpa92DataSet = new BrainW.pfpa92DataSet();
-            this.tblusuariosTableAdapter = new BrainW.pfpa92DataSetTableAdapters.tblusuariosTableAdapter();
+            
             lblID = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tblusuariosBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pfpa92DataSet)).BeginInit();
+
             this.SuspendLayout();
             // 
             // lblID
@@ -268,17 +267,14 @@
             // 
             // tblusuariosBindingSource
             // 
-            this.tblusuariosBindingSource.DataMember = "tblusuarios";
-            this.tblusuariosBindingSource.DataSource = this.pfpa92DataSet;
+            
             // 
             // pfpa92DataSet
             // 
-            this.pfpa92DataSet.DataSetName = "pfpa92DataSet";
-            this.pfpa92DataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            
             // 
             // tblusuariosTableAdapter
             // 
-            this.tblusuariosTableAdapter.ClearBeforeFill = true;
             // 
             // frmUsuarios
             // 
@@ -303,7 +299,6 @@
             this.toolStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tblusuariosBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pfpa92DataSet)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -326,9 +321,9 @@
         private System.Windows.Forms.ToolStripButton toolStripButtonEditar;
         private System.Windows.Forms.ToolStripButton toolStripButtonEliminar;
         private System.Windows.Forms.DataGridView dataGridView1;
-        private pfpa92DataSet pfpa92DataSet;
+        
         private System.Windows.Forms.BindingSource tblusuariosBindingSource;
-        private pfpa92DataSetTableAdapters.tblusuariosTableAdapter tblusuariosTableAdapter;
+       
         private System.Windows.Forms.TextBox txtID;
     }
 }
